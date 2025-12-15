@@ -1,5 +1,4 @@
 local wezterm = require("wezterm")
-
 local module = {}
 
 local function resize_pane(key, direction)
@@ -14,7 +13,7 @@ end
 -- The suggested convention for making modules that update the config is for them to export an
 -- `apply_to_config` function that accepts the config object
 function module.apply_to_config(config)
-	config.key_tables["resize_panes"] = {
+	config.key_tables["resize_pane"] = {
 		resize_pane("h", "Left"),
 		resize_pane("j", "Down"),
 		resize_pane("k", "Up"),
@@ -26,7 +25,7 @@ function module.apply_to_config(config)
 		key = "r",
 		mods = "LEADER",
 		action = wezterm.action.ActivateKeyTable({
-			name = "resize_panes",
+			name = "resize_pane",
 			-- Ensure key table stays active after it handles first key press
 			one_shot = false,
 			-- Deactivate key table after timeout
