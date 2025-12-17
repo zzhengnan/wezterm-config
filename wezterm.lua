@@ -21,6 +21,21 @@ config.key_tables = {}
 
 config.keys = {
 	{
+		key = "l",
+		mods = "LEADER",
+		action = wezterm.action.ShowLauncherArgs({ flags = "WORKSPACES" }),
+	},
+	{
+		key = "h",
+		mods = "ALT",
+		action = wezterm.action.ActivateTabRelative(-1),
+	},
+	{
+		key = "l",
+		mods = "ALT",
+		action = wezterm.action.ActivateTabRelative(1),
+	},
+	{
 		key = "z",
 		mods = "CTRL|SHIFT",
 		action = wezterm.action.TogglePaneZoomState,
