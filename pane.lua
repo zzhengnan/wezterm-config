@@ -13,15 +13,20 @@ end
 -- The suggested convention for making modules that update the config is for them to export an
 -- `apply_to_config` function that accepts the config object
 function module.apply_to_config(config)
-	config.key_tables["resize_pane"] = {
-		resize_pane("h", "Left"),
-		resize_pane("j", "Down"),
-		resize_pane("k", "Up"),
-		resize_pane("l", "Right"),
+	local key_binds = {
+		-- Put current pane into focus. Functionally same as toggling off other panes
+		{ key = "z", mods = "CTRL|SHIFT", action = wezterm.action.TogglePaneZoomState },
+		-- Split into new pane
+		{ key = "%", mods = "CTRL|SHIFT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		{ key = '"', mods = "CTRL|SHIFT", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
 	}
+	for _, key_bind in ipairs(key_binds) do
+		table.insert(config.keys, key_bind)
+	end
 
+	-- https://alexplescan.com/posts/2024/08/10/wezterm/
+	-- LEADER + r to activate `resize_panes` key table
 	table.insert(config.keys, {
-		-- LEADER + r to activate `resize_panes` key table
 		key = "r",
 		mods = "LEADER",
 		action = wezterm.action.ActivateKeyTable({
@@ -32,6 +37,12 @@ function module.apply_to_config(config)
 			timeout_milliseconds = 500,
 		}),
 	})
+	config.key_tables["resize_pane"] = {
+		resize_pane("h", "Left"),
+		resize_pane("j", "Down"),
+		resize_pane("k", "Up"),
+		resize_pane("l", "Right"),
+	}
 end
 
 return module

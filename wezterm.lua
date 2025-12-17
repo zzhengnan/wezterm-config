@@ -16,66 +16,12 @@ config.window_decorations = "RESIZE" -- Remove window title
 -- SHIFT + Space as <leader>
 config.leader = { key = "Space", mods = "SHIFT", timeout_milliseconds = 1000 }
 
--- Will be filled in later
+-- These will be passed into and modified by helper modules later
+config.keys = {}
 config.key_tables = {}
 
-config.keys = {
-	{
-		key = "l",
-		mods = "LEADER",
-		action = wezterm.action.ShowLauncherArgs({ flags = "WORKSPACES" }),
-	},
-	{
-		key = "h",
-		mods = "ALT",
-		action = wezterm.action.ActivateTabRelative(-1),
-	},
-	{
-		key = "l",
-		mods = "ALT",
-		action = wezterm.action.ActivateTabRelative(1),
-	},
-	{
-		key = "z",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.TogglePaneZoomState,
-	},
-	{
-		key = "%",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
-	},
-	{
-		key = '"',
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
-	},
-	{
-		key = "h",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivatePaneDirection("Left"),
-	},
-	{
-		key = "j",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivatePaneDirection("Down"),
-	},
-	{
-		key = "k",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivatePaneDirection("Up"),
-	},
-	{
-		key = "l",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action.ActivatePaneDirection("Right"),
-	},
-}
-
-local resize_pane = require("resize_pane")
-resize_pane.apply_to_config(config)
-
-local create_workspace = require("create_workspace")
-create_workspace.apply_to_config(config)
+require("navigation").apply_to_config(config)
+require("pane").apply_to_config(config)
+require("workspace").apply_to_config(config)
 
 return config
