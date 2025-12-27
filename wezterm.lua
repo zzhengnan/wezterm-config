@@ -9,7 +9,8 @@ else
 end
 
 config.color_scheme = "Dark+"
-config.font = wezterm.font("RobotoMono Nerd Font")
+config.font = wezterm.font("JetBrains Mono")
+-- config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" } -- Disable ligature
 config.window_background_opacity = 0.9
 config.window_decorations = "RESIZE" -- Remove window title
 
