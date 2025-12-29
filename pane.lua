@@ -17,7 +17,7 @@ function module.apply_to_config(config)
 		-- Put current pane into focus. Functionally same as toggling off other panes
 		{ key = "z", mods = "CTRL|SHIFT", action = wezterm.action.TogglePaneZoomState },
 		-- Split into new pane
-		{ key = "%", mods = "CTRL|SHIFT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		{ key = ":", mods = "CTRL|SHIFT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 		{ key = '"', mods = "CTRL|SHIFT", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
 	}
 	for _, key_bind in ipairs(key_binds) do
