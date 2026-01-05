@@ -10,8 +10,8 @@ end)
 function module.apply_to_config(config)
 	-- LEADER + l to show existing workspaces
 	table.insert(config.keys, {
-		key = "l",
-		mods = "LEADER",
+		key = "w",
+		mods = "CTRL|SHIFT",
 		action = wezterm.action.ShowLauncherArgs({ flags = "WORKSPACES" }),
 	})
 
