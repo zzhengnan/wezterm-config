@@ -21,6 +21,13 @@ config.leader = { key = "Space", mods = "SHIFT", timeout_milliseconds = 1000 }
 config.keys = {}
 config.key_tables = {}
 
+-- Add left/right padding to widen tabs
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+	local pad = "          "
+	return pad .. tab.active_pane.title .. pad
+end)
+config.use_fancy_tab_bar = true
+
 require("navigation").apply_to_config(config)
 require("pane").apply_to_config(config)
 require("workspace").apply_to_config(config)
