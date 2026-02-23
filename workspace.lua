@@ -8,11 +8,32 @@ wezterm.on("update-right-status", function(window, pane)
 end)
 
 function module.apply_to_config(config)
-	-- LEADER + l to show existing workspaces
 	table.insert(config.keys, {
+		-- Choose among existing workspaces
 		key = "w",
 		mods = "CTRL|SHIFT",
-		action = wezterm.action.ShowLauncherArgs({ flags = "WORKSPACES" }),
+		action = wezterm.action_callback(function(window, pane)
+			-- Setting `action = wezterm.action.ShowLauncherArgs({ flags = "WORKSPACES" })` also works, but shows extraneous text.
+			-- This custom solution is cleaner
+			local workspaces = wezterm.mux.get_workspace_names()
+			local choices = {}
+			for _, name in ipairs(workspaces) do
+				table.insert(choices, { label = name })
+			end
+
+			window:perform_action(
+				act.InputSelector({
+					title = "Workspaces",
+					choices = choices,
+					action = wezterm.action_callback(function(inner_window, inner_pane, id, label)
+						if label then
+							inner_window:perform_action(act.SwitchToWorkspace({ name = label }), inner_pane)
+						end
+					end),
+				}),
+				pane
+			)
+		end),
 	})
 
 	-- LEADER + w to create new workspace
@@ -22,7 +43,6 @@ function module.apply_to_config(config)
 		action = act.PromptInputLine({
 			description = wezterm.format({
 				{ Attribute = { Intensity = "Bold" } },
-				{ Foreground = { AnsiColor = "Fuchsia" } },
 				{ Text = "Enter name for new workspace:" },
 			}),
 			action = wezterm.action_callback(function(window, pane, line)
