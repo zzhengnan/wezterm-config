@@ -28,8 +28,10 @@ config.key_tables = {}
 
 -- Custom tab title: Current working directory plus # of panes in current tab, with padding on either side
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-	-- TODO: Don't use full path
+	-- Get current directory (without full path)
 	local title = tab.active_pane.current_working_dir.file_path
+	title = title:gsub("/$", "")
+	title = title:gsub(".*/", "")
 
 	-- Use `mux` to handle pane count correctly for when a pane is zoomed in
 	local num_panes = #wezterm.mux.get_tab(tab.tab_id):panes()
