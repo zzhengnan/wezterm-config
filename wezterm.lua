@@ -38,7 +38,27 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 
 	local pad = "          "
 	title = pad .. title .. pad
-	if num_panes > 1 then
+
+	if num_panes == 1 then
+		return title
+	end
+
+	-- Add pane index if in zoomed state
+	local is_zoomed = false
+	local pane_index = 1
+	local active_pane_id = tab.active_pane.pane_id
+	local panes_info = wezterm.mux.get_tab(tab.tab_id):panes_with_info()
+	for i, p in ipairs(panes_info) do
+		if p.pane:pane_id() == active_pane_id then
+			is_zoomed = p.is_zoomed
+			pane_index = i
+			break
+		end
+	end
+
+	if is_zoomed then
+		title = title .. pane_index .. " of " .. num_panes
+	else
 		title = title .. num_panes
 	end
 
