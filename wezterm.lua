@@ -26,8 +26,12 @@ config.leader = { key = "Space", mods = "SHIFT", timeout_milliseconds = 1000 }
 config.keys = {}
 config.key_tables = {}
 
--- Custom tab title: Current working directory plus # of panes in current tab, with padding on either side
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+wezterm.on("format-tab-title", function(tab)
+	-- When multiple panes are open and one is zoomed, append a directional arrow indicating
+	-- which side the hidden pane(s) are on:
+	--   → = active pane is leftmost
+	--   ← = active pane is not leftmost
+
 	-- Get current directory (without full path)
 	local title = tab.active_pane.current_working_dir.file_path
 	title = title:gsub("/$", "")
@@ -43,23 +47,20 @@ wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_wid
 		return title
 	end
 
-	-- Add pane index if in zoomed state
-	local is_zoomed = false
-	local pane_index = 1
+	-- Find active pane
+	local active_pane = nil
 	local active_pane_id = tab.active_pane.pane_id
-	local panes_info = wezterm.mux.get_tab(tab.tab_id):panes_with_info()
-	for i, p in ipairs(panes_info) do
-		if p.pane:pane_id() == active_pane_id then
-			is_zoomed = p.is_zoomed
-			pane_index = i
+	local all_panes = wezterm.mux.get_tab(tab.tab_id):panes_with_info()
+	for _, current_pane in ipairs(all_panes) do
+		if current_pane.pane:pane_id() == active_pane_id then
+			active_pane = current_pane
 			break
 		end
 	end
 
-	if is_zoomed then
-		title = title .. pane_index .. " of " .. num_panes
-	else
-		title = title .. num_panes
+	if active_pane.is_zoomed then
+		local arrow = active_pane.left == 0 and "→ o" or "← i"
+		title = title .. arrow .. pad
 	end
 
 	return title
