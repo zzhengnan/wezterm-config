@@ -2,7 +2,10 @@ local wezterm = require("wezterm")
 local module = {}
 
 -- Show all workspaces, with current workspace highlighted
-wezterm.on("update-right-status", function(window, pane)
+wezterm.on("update-status", function(window)
+	-- Hack: Force tab title to be updated
+	window:set_user_var("tabbar_refresh", tostring(os.time()))
+
 	local workspaces = wezterm.mux.get_workspace_names()
 	local current_workspace = wezterm.mux.get_active_workspace()
 
@@ -24,6 +27,8 @@ end)
 local act = wezterm.action
 
 function module.apply_to_config(config)
+	config.status_update_interval = 100 -- Update status every 100ms
+
 	-- CTRL + SHIFT + w to choose among existing workspaces
 	table.insert(config.keys, {
 		key = "w",
