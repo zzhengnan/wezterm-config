@@ -1,29 +1,6 @@
 local wezterm = require("wezterm")
 local module = {}
 
--- Show all workspaces, with current workspace highlighted
-wezterm.on("update-status", function(window)
-	-- Hack: Force tab title to be updated
-	window:set_user_var("tabbar_refresh", tostring(os.time()))
-
-	local workspaces = wezterm.mux.get_workspace_names()
-	local current_workspace = wezterm.mux.get_active_workspace()
-
-	local colored_workspaces = {}
-	for _, workspace in ipairs(workspaces) do
-		if workspace == current_workspace then
-			table.insert(colored_workspaces, { Background = { Color = "#333333" } })
-			table.insert(colored_workspaces, { Foreground = { Color = "#ffffff" } })
-		else
-			table.insert(colored_workspaces, { Background = { Color = "#1a1a1a" } })
-			table.insert(colored_workspaces, { Foreground = { Color = "#666666" } })
-		end
-		table.insert(colored_workspaces, { Text = "   " .. workspace .. "   " })
-	end
-
-	window:set_right_status(wezterm.format(colored_workspaces))
-end)
-
 local act = wezterm.action
 
 function module.apply_to_config(config)

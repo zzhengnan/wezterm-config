@@ -8,11 +8,12 @@ This is a WezTerm terminal emulator configuration written in Lua. WezTerm loads 
 
 ## Architecture
 
-The config is split into three modules, each exporting an `apply_to_config(config)` function that mutates the shared config table:
+The config is split into four modules, each exporting an `apply_to_config(config)` function that mutates the shared config table:
 
-- **`wezterm.lua`** — Entry point. Sets global options (font, color scheme, cursor, window decorations), defines the `<leader>` key (`SHIFT+Space`), registers the `format-tab-title` event handler, and calls each module's `apply_to_config`.
+- **`wezterm.lua`** — Entry point. Sets global options (font, color scheme, cursor, window decorations), defines the `<leader>` key (`SHIFT+Space`), and calls each module's `apply_to_config`.
 - **`navigation.lua`** — Pane and tab movement keybinds (`CTRL+SHIFT+hjkl` for panes, `ALT+h/l` for tabs, `LEADER+h/l` to jump and zoom left/right panes).
 - **`pane.lua`** — Pane splitting (`CTRL+SHIFT+:` horizontal, `CTRL+SHIFT+"` vertical) and a `resize_pane` key table activated by `LEADER+r` (then `hjkl` to resize, auto-exits after 500ms idle).
+- **`tab.lua`** — Tab title rendering via the `format-tab-title` event (manual title if set, otherwise pane title; appends `→`/`←` arrow when a pane is zoomed) and `LEADER+t` to rename the current tab.
 - **`workspace.lua`** — Workspace management: right-status bar showing all workspaces with the active one highlighted, `CTRL+SHIFT+w` to switch workspaces via a custom selector, `LEADER+w` to create a new named workspace.
 
 ## Key Design Patterns

@@ -1,3 +1,8 @@
+-- Define function in the `module` table.
+-- Only functions defined in `module` will be exported to code that imports this module
+-- The suggested convention for making modules that update the config is for them to export an
+-- `apply_to_config` function that accepts the config object
+
 local wezterm = require("wezterm")
 local module = {}
 
@@ -8,25 +13,7 @@ local function resize_pane(key, direction)
 	}
 end
 
--- Define function in the `module` table.
--- Only functions defined in `module` will be exported to code that imports this module
--- The suggested convention for making modules that update the config is for them to export an
--- `apply_to_config` function that accepts the config object
-
 function module.apply_to_config(config)
-	table.insert(config.keys, {
-		key = "t",
-		mods = "LEADER",
-		action = wezterm.action.PromptInputLine({
-			description = "Enter tab name:",
-			action = wezterm.action_callback(function(window, pane, line)
-				if line and line ~= "" then
-					window:active_tab():set_title(line)
-				end
-			end),
-		}),
-	})
-
 	local key_binds = {
 		-- Split into new pane
 		{ key = ":", mods = "CTRL|SHIFT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
