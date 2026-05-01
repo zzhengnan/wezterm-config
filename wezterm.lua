@@ -13,10 +13,10 @@ config.default_cursor_style = "BlinkingBar"
 config.font = wezterm.font("JetBrains Mono")
 config.inactive_pane_hsb = {
 	-- Decrease brightness for inactive panes
-	brightness = 0.2,
+	brightness = 0.4,
 }
 config.use_fancy_tab_bar = true
-config.window_background_opacity = 0.9
+-- config.window_background_opacity = 0.9
 config.window_decorations = "RESIZE" -- Remove window title
 
 -- SHIFT + Space as <leader>
@@ -32,10 +32,7 @@ wezterm.on("format-tab-title", function(tab)
 	--   → = active pane is leftmost
 	--   ← = active pane is not leftmost
 
-	-- Get current directory (without full path)
-	local title = tab.active_pane.current_working_dir.file_path
-	title = title:gsub("/$", "")
-	title = title:gsub(".*/", "")
+	local title = tab.tab_title ~= "" and tab.tab_title or tab.active_pane.title
 
 	-- Use `mux` to handle pane count correctly for when a pane is zoomed in
 	local num_panes = #wezterm.mux.get_tab(tab.tab_id):panes()
@@ -59,7 +56,7 @@ wezterm.on("format-tab-title", function(tab)
 	end
 
 	if active_pane.is_zoomed then
-		local arrow = active_pane.left == 0 and "→ o" or "← i"
+		local arrow = active_pane.left == 0 and "→" or "←"
 		title = title .. arrow .. pad
 	end
 

@@ -13,16 +13,16 @@ function module.apply_to_config(config)
 		{ key = "l", mods = "ALT", action = wezterm.action.ActivateTabRelative(1) },
 		-- Move between left/right panes and zoom
 		{
-			key = "i",
-			mods = "CTRL|SHIFT",
+			key = "h",
+			mods = "LEADER",
 			action = wezterm.action.Multiple({
 				wezterm.action.ActivatePaneDirection("Left"),
 				wezterm.action.TogglePaneZoomState,
 			}),
 		},
 		{
-			key = "o",
-			mods = "CTRL|SHIFT",
+			key = "l",
+			mods = "LEADER",
 			action = wezterm.action.Multiple({
 				wezterm.action.ActivatePaneDirection("Right"),
 				wezterm.action.TogglePaneZoomState,
